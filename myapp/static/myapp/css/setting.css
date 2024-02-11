@@ -1,0 +1,26 @@
+
+.btn{
+    width: 120px;
+}
+
+.form-elem{
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
+}
+.form-elem label{
+    width: 200px;
+}
+.form-elem input{
+    width: 200px;
+}
+li{
+    list-style: none;
+}
+.errors{
+    margin: 20 0;
+}
+.errors ul{
+    width: 500px;
+    margin: 0 auto;
+}

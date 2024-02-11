@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/base.css' %}" />
+    {% block extra_style %}
+    <link rel="stylesheet" href="../../static/myapp/css/setting.css">
+    {% endblock %}
+    <title>DeMiAインターン</title>
+</head>
+<body>
+    {% block header %}
+    <header class="header">
+        <div class="header-container">
+            <span class="header-container__title">
+                {% block header-title %}設定{% endblock %}
+            </span>
+        </div>
+    </header>
+    {% endblock %}
+
+    {% block content %}
+    <div class="btn-box">
+        <button class="btn" onclick="location.href='./username_change'">ユーザー名変更</button>
+    </div>
+    <div class="btn-box">
+        <button class="btn" onclick="location.href='./email_change'">メールアドレス変更</button>
+    </div>
+    <div class="btn-box">
+        <button class="btn" onclick="location.href='./icon_change'">アイコン変更</button>
+    </div>
+    <div class="btn-box">
+        <button class="btn" onclick="location.href='./password_change'">パスワード変更</button>
+    </div>
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <div class="btn-box">
+            <button class="btn">ログアウト</button>
+        </div>
+    </form>
+    {% endblock %}
+    
+    {% block footer %}
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-container__item">
+                <a href="{% url 'friends' %}" class="footer-item__link">
+                    <span class="footer-item__icon"><img src="{% static 'myapp/img/people-24px.svg' %}"></span>
+                    <span class="footer-item__text">友達</span>
+                </a>
+            </div>
+            <div class="footer-container__item">
+                <a href="{% url 'setting' %}" class="footer-item__link">
+                    <span class="footer-item__icon"><img src="{% static 'myapp/img/settings-black-18dp.svg' %}"></span>
+                    <span class="footer-item__text">設定</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+    {% endblock %}
+</body>
+</html>
