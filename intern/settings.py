@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-ozyl(r!*=wht$a7^pp+wp=zg5g96yg5wz!7fwe$gq63874z9##
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,6 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account'
+    # 'allauth.socialaccount',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'intern.urls'
@@ -105,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja'
 
 TIME_ZONE = 'Asia/Tokyo'
 
@@ -124,12 +129,15 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "no-reply@example.com")
 AUTH_USER_MODEL = "myapp.user"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media_local'
 
-Login_URL = 'login'
+
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
@@ -139,3 +147,44 @@ if os.path.isfile('.env'):
 
     DEBUG = env('DEBUG')
     ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+
+SITE_ID = 1
+AUTHENTICATION_BACKENDS = (
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend'
+)
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_USERNAME_REQUIRED = True
+
+
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_MAX_EMAIL_ADDRESSES = 2
+
+LOGIN_REDIRECT_URL = '/friends'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = 'account_login'
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
+
+ACCOUNT_LOGOUT_ON_GET = True
+
+ACCOUNT_EMAIL_SUBJECT_PREFIX = ''
+
+DEFAULT_FROM_EMAIL = 'admin@example.com'
+
+# django-allauthのデフォルトフォームをオーバーライドhttps://docs.allauth.org/en/latest/account/configuration.html
+ACCOUNT_FORMS = {
+    'signup': 'myapp.forms.MyCustomSignupForm',
+    #TODO:↓のフォームの作成
+    # 'login': 'myapp.forms.MyCustomLoginForm',
+    # 'reset_password_from_key': 'myapp.forms.MyCustomResetPasswordKeyForm',
+    # 'reset_password': 'myapp.forms.CustomResetPasswordForm',
+}
+
+ACCOUNT_ADAPTER = 'myapp.adapter.MyCustomAccountAdapter'
+
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True

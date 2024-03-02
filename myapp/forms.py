@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from .models import Talk
+from allauth.account.forms import LoginForm,SignupForm
 
 User = get_user_model()
 
@@ -36,3 +37,20 @@ class IconForm(forms.ModelForm):
         model = User
         fields = ["icon"]
         labels = {"icon":"New Icon"}
+
+class MyCustomSignupForm(SignupForm):
+    icon = forms.ImageField()
+    class Meta:
+        model = User
+
+    def save(self, request):
+        # Ensure you call the parent class's save.
+        # .save() returns a User object.
+        user = super(MyCustomSignupForm, self).save(request)
+        # Add your own processing here.
+        # You must return the original result.
+        user.icon = self.cleaned_data['icon']
+        user.save()
+        return user
+# class MyCustomLoginForm(LoginForm):
+

@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from .forms import SignUpForm,LoginForm,MessageForm,UsernameForm,EmailForm,IconForm
 from .models import Talk
 from django.contrib.auth.views import LoginView,PasswordChangeView,LogoutView
-from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.db.models import Q
@@ -120,12 +119,10 @@ def password_change(request):
 def password_change_done(request):
     return render(request,"myapp/password_change_done.html")
 
-@login_required
 class PasswordChange(LoginRequiredMixin,PasswordChangeView):
     template_name = "myapp/password_change.html"
     success_url = "password_change_done"
 
-@login_required
 class Logout(LoginRequiredMixin,LogoutView):
     template_name = "myapp/index.html"
     next_page = "index"

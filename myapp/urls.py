@@ -1,11 +1,12 @@
-from django.urls import path
-from . import views,forms
+from django.urls import path,include
+from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('accounts/', include('allauth.urls')),
     path('signup',views.signup_view,name='signup_view'),
     path('login', views.Login.as_view(), name='login_view'),
     path('friends', views.friends, name='friends'),
