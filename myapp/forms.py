@@ -52,5 +52,3 @@ class MyCustomSignupForm(SignupForm):
         user.icon = self.cleaned_data['icon']
         user.save()
         return user
-# class MyCustomLoginForm(LoginForm):
-

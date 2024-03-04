@@ -23,23 +23,20 @@
 
     {% block content %}
     <div class="btn-box">
-        <button class="btn" onclick="location.href='./username_change'">ユーザー名変更</button>
+        <a class="btn" href="{% url 'username_change' %}">ユーザー名変更</a>
     </div>
     <div class="btn-box">
-        <button class="btn" onclick="location.href='./email_change'">メールアドレス変更</button>
+        <a class="btn" href="{% url 'account_email' %}">メールアドレス変更</a>
     </div>
     <div class="btn-box">
-        <button class="btn" onclick="location.href='./icon_change'">アイコン変更</button>
+        <a class="btn" href="{% url 'icon_change' %}">アイコン変更</a>
     </div>
     <div class="btn-box">
-        <button class="btn" onclick="location.href='./password_change'">パスワード変更</button>
+        <a class="btn" href="{% url 'account_reset_password' %}">パスワード変更</a>
     </div>
-    <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <div class="btn-box">
-            <button class="btn">ログアウト</button>
-        </div>
-    </form>
+    <div class="btn-box">
+        <a class="btn" href="{% url 'account_logout' %}">ログアウト</a>
+    </div>
     {% endblock %}
     
     {% block footer %}

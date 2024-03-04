@@ -176,10 +176,6 @@ DEFAULT_FROM_EMAIL = 'admin@example.com'
 # django-allauthのデフォルトフォームをオーバーライドhttps://docs.allauth.org/en/latest/account/configuration.html
 ACCOUNT_FORMS = {
     'signup': 'myapp.forms.MyCustomSignupForm',
-    #TODO:↓のフォームの作成
-    # 'login': 'myapp.forms.MyCustomLoginForm',
-    # 'reset_password_from_key': 'myapp.forms.MyCustomResetPasswordKeyForm',
-    # 'reset_password': 'myapp.forms.CustomResetPasswordForm',
 }
 
 ACCOUNT_ADAPTER = 'myapp.adapter.MyCustomAccountAdapter'

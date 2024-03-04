@@ -1,36 +1,43 @@
-{% extends "account/base_entrance.html" %}
-{% load i18n %}
-{% load allauth account %}
-{% block head_title %}
-    {% trans "Sign In" %}
-{% endblock head_title %}
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/login.css' %}" />
+{% endblock %}
+
+{% block header-title %}
+    ログイン
+{% endblock %}
+
 {% block content %}
-    {% element h1 %}
-        {% trans "Sign In" %}
-    {% endelement %}
-    <p>
-        {% blocktrans %}If you have not created an account yet, then please
-    <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}
-    </p>
-    {% url 'account_login' as login_url %}
-    {% element form form=form method="post" action=login_url tags="entrance,login" %}
-        {% slot body %}
+    <form action="{% url 'account_login' %}" method='post'>
+        <div class='container'>
+            {{ form.non_foeld_errors }}
             {% csrf_token %}
-            {% element fields form=form unlabeled=True %}
-            {% endelement %}
-            {% if redirect_field_value %}
-                <input type="hidden"
-                       name="{{ redirect_field_name }}"
-                       value="{{ redirect_field_value }}" />
+            {% for field in form %}
+                <div class="form-elem">
+                    <div class="label">
+                        {{ field.label }}
+                    </div>
+                    <div class="field">
+                        {{ field }}
+                    </div>
+                </div>
+            {% endfor %}
+            {% if form.errors %}
+            {% for item in form %}
+            <div>
+                {{ item.errors }}
+            </div>
+            {% endfor %}
             {% endif %}
-        {% endslot %}
-        {% slot actions %}
-            {% element button type="submit" tags="prominent,login" %}
-                {% trans "Sign In" %}
-            {% endelement %}
-        {% endslot %}
-    {% endelement %}
-    {% if SOCIALACCOUNT_ENABLED %}
-        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
-    {% endif %}
-{% endblock content %}
+        </div>
+        {% if redirect_field_value %}
+        <input type='hidden' name='{{ redirect_field_name }}' value='{{redirect_field_value}}' />
+        {% endif %}
+        <div><input type='submit' class='btn' value='ログイン'></div>
+        </form>
+
+{% endblock %}
+
+{% block footer %}{% endblock %}
