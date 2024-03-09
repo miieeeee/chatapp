@@ -1,17 +1,9 @@
+{% extends 'myapp/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/base.css' %}" />
     {% block extra_style %}
     <link rel="stylesheet" href="{% static 'myapp/css/talk_room.css' %}">
     {% endblock %}
-    <title>DeMiAインターン</title>
-</head>
-<body>
-    {% block header %}
+{% block header %}
     <header class="header">
         <div class="header-container">
             <span class="exit">
@@ -27,47 +19,45 @@
             </span>
         </div>
     </header>
-    {% endblock %}
-    {% for talk in talks %}
-        <div class="message-container">
-            <div class="message-info">
-                <div class="message-user">
-                    >
-                    {% if talk.send_from == pk %}
-                    {{user.to}}
-                    {% else %}
-                    {{user.from}}
-                    {% endif %}
-                </div>
-                <div class="message-date">
-                    {{ talk.date|date:"n/d G:i" }}
-                </div>
+{% endblock %}
+{% block content %}
+{% for talk in talks %}
+    <div class="message-container">
+        <div class="message-info">
+            <div class="message-user">
+                >
+                {% if talk.send_from == pk %}
+                {{user.to}}
+                {% else %}
+                {{user.from}}
+                {% endif %}
             </div>
-            <div class="message-text">
-                {{ talk.message }}
+            <div class="message-date">
+                {{ talk.date|date:"n/d G:i" }}
             </div>
         </div>
-    {% endfor %}
-    {% block content %}
-    {% endblock %}
+        <div class="message-text">
+            {{ talk.message }}
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}
 
-    {% block footer %}
-    <footer class="footer">
-        <div class="footer-container">
-            <form class="message-form" action="{% url 'talk_room' pk %}" method="POST" >{% csrf_token %}
-                <div class="message-form-container">
-                    <div class="message-field">
-                        {% for field in form%}
-                        {{field}}
-                        {% endfor %}
-                    </div>
-                    <div class="btn-box">
-                        <button class="btn" type="submit">送信</button>
-                    </div>
+{% block footer %}
+<footer class="footer">
+    <div class="footer-container">
+        <form class="message-form" action="{% url 'talk_room' pk %}" method="POST" >{% csrf_token %}
+            <div class="message-form-container">
+                <div class="message-field">
+                    {% for field in form%}
+                    {{field}}
+                    {% endfor %}
                 </div>
-            </form>
-        </div>
-    </footer>
-    {% endblock %}
-</body>
-</html>
+                <div class="btn-box">
+                    <button class="btn" type="submit">送信</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</footer>
+{% endblock %}

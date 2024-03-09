@@ -1,34 +1,22 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-from .forms import SignUpForm,LoginForm,MessageForm,UsernameForm,EmailForm,IconForm
+from .forms import MessageForm,UsernameForm,IconForm,FriendSearchForm
 from .models import Talk
-from django.contrib.auth.views import LoginView,PasswordChangeView,LogoutView
+from django.contrib.auth.views import PasswordChangeView,LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from django.utils import timezone
 User = get_user_model()
 def index(request):
     return render(request, "myapp/index.html")
-
-def signup_view(request):
-    error = ''
-    if request.method == 'POST':
-        form = SignUpForm(request.POST,request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('index')
-        else:
-            for value in form.errors.values():
-                if(error != '') : error += '\n'
-                error += value
-    else:
-        form = SignUpForm()
-    return render(request, 'myapp/signup.html', {'form' : form,'error_message':error}) 
-
 @login_required
 def friends(request):
+    form = FriendSearchForm(request.GET)
     friends = User.objects.exclude(id=request.user.id)
+    if form.is_valid():
+        search_name = form.cleaned_data['search_name']
+        if search_name:        
+            friends = friends.filter(username=search_name)
     users = []
     users_no_message = []
     users_have_message = []
@@ -42,7 +30,7 @@ def friends(request):
         users.append(user)
     for user in users_no_message:
         users.append(user)
-    return render(request, "myapp/friends.html", {'users' : users})
+    return render(request, "myapp/friends.html", {'users' : users,'form' : form})
 
 @login_required
 def talk_room(request,pk):
@@ -61,10 +49,6 @@ def talk_room(request,pk):
 def setting(request):
     return render(request, "myapp/setting.html")
  
-class Login(LoginView):
-    authentication_form = LoginForm
-    template_name = "myapp/login.html"
-    next_page = "friends"
 
 @login_required 
 def username_change(request):
@@ -81,20 +65,6 @@ def username_change(request):
 def username_change_done(request):
     return render(request,"myapp/username_change_done.html")
 
-@login_required
-def email_change(request):
-    if(request.method == 'POST'):
-        form = EmailForm(request.POST,instance=request.user)
-        if(form.is_valid()):
-            form.save()
-            return redirect('email_change_done')
-    else:
-        form = EmailForm()
-    return render(request, "myapp/email_change.html",{"form":form})
-
-@login_required
-def email_change_done(request):
-    return render(request,"myapp/email_change_done.html")
 
 @login_required
 def icon_change(request):
@@ -110,10 +80,6 @@ def icon_change(request):
 @login_required
 def icon_change_done(request):
     return render(request,"myapp/icon_change_done.html")
-
-@login_required
-def password_change(request):
-    return render(request, "myapp/password_change.html")
 
 @login_required
 def password_change_done(request):

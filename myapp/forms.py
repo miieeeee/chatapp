@@ -1,20 +1,10 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from .models import Talk
-from allauth.account.forms import LoginForm,SignupForm
+from allauth.account.forms import SignupForm
 
 User = get_user_model()
 
-class SignUpForm(UserCreationForm):
-    class Meta:
-        model = User
-        fields = ('username','email','password1','password2','icon')
-        labels = {'username':'Username', 'email':'Email address', 'password1':"Password", 'password2':'Password confirmation'}
-
-
-class LoginForm(AuthenticationForm):
-    pass
 
 class MessageForm(forms.ModelForm):
     class Meta:
@@ -27,11 +17,6 @@ class UsernameForm(forms.ModelForm):
         model = User
         fields = ["username"]
         labels = {"username":"New Username"}
-class EmailForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ["email"]
-        labels = {"email":"New Email"}
 class IconForm(forms.ModelForm):
     class Meta:
         model = User
@@ -52,3 +37,7 @@ class MyCustomSignupForm(SignupForm):
         user.icon = self.cleaned_data['icon']
         user.save()
         return user
+    
+class FriendSearchForm(forms.Form):
+    search_name = forms.CharField(max_length=50,required=False)
+    search_name.widget.attrs.update({'class':'search-box'})

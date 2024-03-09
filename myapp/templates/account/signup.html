@@ -8,10 +8,11 @@
 {% block header %}
     <header class="header">
         <div class="header-container">
-            <div class='back'><a href='{% url "index" %}' class='back-button'>＜</a></div>
-            <div class='title'>
-                会員登録
-            </div>
+            <div class='exit'><a href='{% url "index" %}' class='back-button'><</a></div>
+
+            <span class="header-container__title">
+                {% block header-title %}会員登録{% endblock %}
+            </span>
         </div>
     </header>
 {% endblock %}

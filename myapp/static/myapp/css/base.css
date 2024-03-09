@@ -16,6 +16,7 @@ body{
 
 /* ヘッダー */
 .header{
+    background-color: #dfdfdf;
     width: 100vw;
     height: 64px;
     border-bottom: solid 1px #9b9b9b;
@@ -57,6 +58,7 @@ body{
     border-top: solid 1px #9b9b9b;
 }
 .footer-container__item{
+    background-color: #dfdfdf;
     display: flex;
     position: relative;
     width: 50%;
@@ -103,4 +105,21 @@ body{
     border: 1px solid #000;
     text-align: center;
     border-radius: 5px;
+}
+
+/* 戻るボタン */
+.exit{
+    z-index: 1;
+    display: block;
+    width: 20px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    height: 1rem;
+    line-height: 1rem;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #000;
 }

@@ -5,10 +5,17 @@
 <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/login.css' %}" />
 {% endblock %}
 
-{% block header-title %}
-    ログイン
-{% endblock %}
+{% block header %}
+    <header class="header">
+        <div class="header-container">
+            <div class='exit'><a href='{% url "index" %}' class='back-button'><</a></div>
 
+            <span class="header-container__title">
+                {% block header-title %}ログイン{% endblock %}
+            </span>
+        </div>
+    </header>
+{% endblock %}
 {% block content %}
     <form action="{% url 'account_login' %}" method='post'>
         <div class='container'>
@@ -35,6 +42,7 @@
         {% if redirect_field_value %}
         <input type='hidden' name='{{ redirect_field_name }}' value='{{redirect_field_value}}' />
         {% endif %}
+        <a class="reset-password" href="/accounts/password/reset/">Forgot Password?</a>
         <div><input type='submit' class='btn' value='ログイン'></div>
         </form>
 

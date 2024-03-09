@@ -9,17 +9,13 @@
     <title>login</title>
 </head>
 <body>
-    {% block header %}
     <header class="header">
         <div class="header-container">
             <span class="header-container__title">
-                {% block header-title %}
                 ログイン
-                {% endblock %}
             </span>
         </div>
     </header>
-    {% endblock %}
     {% if form.errors  %}
     <div class="login-error-message">
         <span>ユーザーID, パスワードが一致しません．</span>

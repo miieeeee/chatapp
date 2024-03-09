@@ -1,90 +1,64 @@
-{% extends "account/base_manage_email.html" %}
-{% load allauth i18n %}
-{% block head_title %}
-    {% trans "Email Addresses" %}
-{% endblock head_title %}
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/edit.css' %}" />
+{% endblock %}
+
+{% block header %}
+    <header class="header">
+        <div class="header-container">
+            <div class='exit'><a href='{% url "setting" %}' class='back-button'><</a></div>
+            <div class='title'>
+                メールアドレス変更
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
 {% block content %}
-    {% element h1 %}
-        {% trans "Email Addresses" %}
-    {% endelement %}
-    {% if emailaddresses %}
-        <p>{% trans 'The following email addresses are associated with your account:' %}</p>
-        {% url 'account_email' as email_url %}
-        {% element form form=form action=email_url method="post" %}
-            {% slot body %}
-                {% csrf_token %}
-                {% for radio in emailaddress_radios %}
-                    {% with emailaddress=radio.emailaddress %}
-                        {% element field type="radio" checked=radio.checked name="email" value=emailaddress.email id=radio.id %}
-                            {% slot label %}
-                                {{ emailaddress.email }}
-                                {% if emailaddress.verified %}
-                                    {% element badge tags="success,email,verified" %}
-                                        {% translate "Verified" %}
-                                    {% endelement %}
-                                {% else %}
-                                    {% element badge tags="warning,email,unverified" %}
-                                        {% translate "Unverified" %}
-                                    {% endelement %}
-                                {% endif %}
-                                {% if emailaddress.primary %}
-                                    {% element badge tags="email,primary" %}
-                                        {% translate "Primary" %}
-                                    {% endelement %}
-                                {% endif %}
-                            {% endslot %}
-                        {% endelement %}
-                    {% endwith %}
-                {% endfor %}
-            {% endslot %}
-            {% slot actions %}
-                {% element button type="submit" name="action_primary" %}
-                    {% trans 'Make Primary' %}
-                {% endelement %}
-                {% element button tags="secondary" type="submit" name="action_send" %}
-                    {% trans 'Re-send Verification' %}
-                {% endelement %}
-                {% element button tags="danger,delete" type="submit" name="action_remove" %}
-                    {% trans 'Remove' %}
-                {% endelement %}
-            {% endslot %}
-        {% endelement %}
+<div class='container'>
+<div>
+    {% for emailaddress in user.emailaddress_set.all %}
+    {% if emailaddress.verified %}
+    <p>登録されているメールアドレス</p>
+    <p>{{ emailaddress.email }}</p>
     {% else %}
-        {% include "account/snippets/warn_no_email.html" %}
+    <p>未確認のメールアドレス</p>
+    <form action="{% url 'account_email' %}" method="post" >
+        {% csrf_token %}
+        <input type="text" readonly name="email" value="{{emailaddress.email}}" class='form-control'/>
+        <p>
+            メールアドレスを変更する場合は、上記メールアドレス宛に送信されたメールをご確認ください。
+            メールが届いていない場合は、「確認メールを再送する」ボタンをクリックしてください。			
+        </p>
+        <button type="submit" name="action_send" class='submit-button' style='font-size: 10px;'>
+        確認メールを再送する</button>
+        <button type="submit" name="action_remove" class='submit-button'style='font-size: 10px;'>
+            削除</button>
+    </form>
     {% endif %}
+    {% endfor %}
+</div>
     {% if can_add_email %}
-        {% element h2 %}
-            {% trans "Add Email Address" %}
-        {% endelement %}
-        {% url 'account_email' as action_url %}
-        {% element form form=form method="post" action=action_url %}
-            Hoi bef bod
-            {% slot body %}
-                {% csrf_token %}
-                {% element fields form=form %}
-                {% endelement %}
-            {% endslot %}
-            befac
-            {% slot actions %}
-                {% element button name="action_add" type="submit" %}
-                    {% trans "Add Email" %}
-                {% endelement %}
-            {% endslot %}
-        {% endelement %}
+    <form method="post" action="{% url 'account_email' %}" class="add_email">
+        {% csrf_token %}
+        <div>
+            <input type="email" name="email" placeholder="新しいメールアドレス" required="" id="id_email" class='form-control'>
+        </div>
+        <p>メールアドレスを所有していることを確認するためにメールが送信されます。確認が完了するとメールアドレスが更新されます。</p>
+        {% for error in form.errors.email %}
+        <p>{{ error }}</p>
+        {% endfor %}
+        <button name="action_add" type="submit" class='submit-button' style='font-size: 10px;'>
+            確認メールを送信</button>
+    </form>
+    {% else %}
+    <p>変更する場合は、未確認となっているメールアドレスを削除してください。</p>
     {% endif %}
-{% endblock content %}
-{% block extra_body %}
-    <script type="text/javascript">
-(function() {
-  var message = "{% trans 'Do you really want to remove the selected email address?' %}";
-  var actions = document.getElementsByName('action_remove');
-  if (actions.length) {
-    actions[0].addEventListener("click", function(e) {
-      if (! confirm(message)) {
-        e.preventDefault();
-      }
-    });
-  }
-})();
-    </script>
-{% endblock extra_body %}
+</div>
+
+{% endblock %}
+
+
+{% block footer %}{% endblock %}

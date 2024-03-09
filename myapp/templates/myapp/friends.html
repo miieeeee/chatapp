@@ -1,72 +1,43 @@
+{% extends 'myapp/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/base.css' %}" />
-    {% block extra_style %}
-    <link rel="stylesheet" href="{% static 'myapp/css/friends.css' %}">
-    {% endblock %}
-    <title>DeMiAインターン</title>
-</head>
-<body>
-    {% block header %}
-    <header class="header">
-        <div class="header-container">
-            <span class="header-container__title">
-                {% block header-title %}友達{% endblock %}
-            </span>
-        </div>
-    </header>
-    {% endblock %}
-    <ul class="friends">
-        {% for user in users %}
-            <a href="{% url 'talk_room' user.id %}">
-                <li class="friends-elem">
-                    <div class="friend-icon">
-                        <img src="media/{{user.icon}}"  alt="">
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'myapp/css/friends.css' %}">
+{% endblock %}
+{% block header-title %}友達{% endblock %}
+{% block content %}
+<div class="friend-search">
+    <form class="search-form" action="{% url 'friends' %}" method="GET">
+        <ul class="search-list">
+            <li class="search-box-wrap">{{ form.search_name }}</li>
+            <li class="search-btn-wrap" ><button class="search-btn" type="submit">検索</button></li>
+        </ul>
+    </form>
+</div>
+<ul class="friends">
+{% for user in users %}
+    <a href="{% url 'talk_room' user.id %}">
+        <li class="friends-elem">
+            <div class="friend-icon">
+                <img src="media/{{user.icon}}"  alt="">
+            </div>
+            <div class="friend-info">
+                <div class="friend-username">
+                    {{user.username}}
+                </div>
+                <div class="message">
+                    {% if user.message != None%}
+                    <div class="message-text">
+                        {{user.message}}
                     </div>
-                    <div class="friend-info">
-                        <div class="friend-username">
-                            {{user.username}}
-                        </div>
-                        <div class="message">
-                            {% if user.message != None%}
-                            <div class="message-text">
-                                {{user.message}}
-                            </div>
-                            <div class="message-date">
-                                {{user.date}}
-                            </div>
-                            {% endif %}
-                        </div>
+                    <div class="message-date">
+                        {{user.date}}
                     </div>
-                    
-                </li>
-            </a>
-        {% endfor %}
-    </ul>
-    {% block content %}
-    {% endblock %}
+                    {% endif %}
+                </div>
+            </div>         
+        </li>
+    </a>
+{% endfor %}
+</ul>
 
-    {% block footer %}
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-container__item">
-                <a href="{% url 'friends' %}" class="footer-item__link">
-                    <span class="footer-item__icon"><img src="{% static 'myapp/img/people-24px.svg' %}"></span>
-                    <span class="footer-item__text">友達</span>
-                </a>
-            </div>
-            <div class="footer-container__item">
-                <a href="{% url 'setting' %}" class="footer-item__link">
-                    <span class="footer-item__icon"><img src="{% static 'myapp/img/settings-black-18dp.svg' %}"></span>
-                    <span class="footer-item__text">設定</span>
-                </a>
-            </div>
-        </div>
-    </footer>
-    {% endblock %}
-</body>
-</html>
+{% endblock %}
