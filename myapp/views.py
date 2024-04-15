@@ -34,14 +34,6 @@ def friends(request):
     ).annotate(last_date=Subquery(sub_qs.values("date")))
 
     for friend in friends_with_message:
-        # message = (
-        #     Talk.objects.filter(
-        #         Q(send_from=request.user, send_to=friend)
-        #         | Q(send_from=friend, send_to=request.user)
-        #     )
-        #     .order_by()
-        #     .last()
-        # )
         if friend.last_message:
             users_have_message.append(
                 {
