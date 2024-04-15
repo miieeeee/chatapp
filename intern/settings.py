@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'myapp',
     'django.contrib.sites',
     'allauth',
-    'allauth.account'
+    'allauth.account',
+    'debug_toolbar',
     # 'allauth.socialaccount',
 ]
 
@@ -54,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware', 
 ]
 
 ROOT_URLCONF = 'intern.urls'
@@ -188,3 +190,9 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
+INTERNAL_IPS = ['127.0.0.1']
+DEBUG_TOOLBAR_CONFIG = {
+    # ツールバーを表示させる
+    "SHOW_TOOLBAR_CALLBACK" : lambda request: True,
+}
